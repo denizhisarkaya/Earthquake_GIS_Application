@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>GIS Application of Damaged Roads</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-control {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #08dcbc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <!-- Include required CSS and JavaScript files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 100%;"></div>
+    <div class="custom-control">
+        <button onclick="addInfo()">Bilgi Ekle</button>
+    </div>
+    <script>
+        // Harita konteynerini seçin
+        var mapContainer = document.getElementById('map');
+
+        // Harita oluşturma ve görüntüleme
+        var myMap = L.map(mapContainer).setView([37.357150, 37.030432], 13);
+
+        // OpenStreetMap tile layer'ını ekleyin
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(myMap);
+
+        var nurdagikirmizi = [37.168569, 36.716095];
+        var nurdagimavi = [37.166982, 36.716437];
+        var sekeroba = [37.251053, 36.774065];
+        var pazarcik = [37.494706, 37.296648];
+        var marasmerkez1 = [37.576314, 36.921827];
+        var marasmerkez2 = [37.577913, 36.928086];
+
+        var markers = [
+            { location: nurdagikirmizi, popup: 'Fay kırılması ve toprak kaymalarından dolayı kapalı olan alanlardandır.' },
+            { location: nurdagimavi, popup: 'Yıkıntılardan dolayı kapalıdır.' },
+            { location: sekeroba, popup: 'Yıkıntılardan dolayı kapalıdır.' },
+            { location: pazarcik, popup: 'Yıkıntılardan dolayı kapalıdır.' },
+            { location: marasmerkez1, popup: 'Yıkıntılardan dolayı kapalıdır.' },
+            { location: marasmerkez2, popup: 'Yıkıntılardan dolayı kapalıdır.' }
+        ];
+
+        for (var i = 0; i < markers.length; i++) {
+            var marker = markers[i];
+            L.marker(marker.location).bindPopup(marker.popup).addTo(myMap);
+        }
+
+        function addInfo() {
+            var latitude = parseFloat(prompt("Enlem (Latitude) derece olarak değerini girin:"));
+            var longitude = parseFloat(prompt("Boylam (Longitude) derece olarak değerini girin:"));
+            var popupText = prompt("Bilgi mesajını girin:");
+
+            if (!isNaN(latitude) && !isNaN(longitude) && popupText) {
+                var newMarker = L.marker([latitude, longitude]).bindPopup(popupText).addTo(myMap);
+                alert("Bilgi başarıyla eklendi!");
+            } else {
+                alert("Geçersiz giriş!");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
+
